@@ -1,6 +1,8 @@
 <a href="https://modrinth.com/mod/rarityglow">
-  <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg" width="96" alt="Modrinth" style="vertical-align: middle; margin-right: 8px;" />
-</a><span style="font-size: 2em;">RarityGlow</span>
+  <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg" width="128" alt="Modrinth"/>
+</a>
+
+# RarityGlow
 
 为不同稀有度的物品添加动态发光效果。
 
