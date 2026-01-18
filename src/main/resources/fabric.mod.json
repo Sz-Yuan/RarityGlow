@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "rarityglow",
+	"version": "${version}",
+	"name": "RarityGlow",
+	"description": "一个物品发光模组(❁´◡`❁)",
+	"authors": [
+		"KiteJs!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/"
+	},
+	"license": "MIT",
+	"icon": "assets/rarityglow/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"kitejs.RarityGlow"
+		],
+		"modmenu": [
+			"kitejs.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*",
+		"cloth-config": ">=21.11.153"
+	},
+	"recommends": {
+		"modmenu": ">=17.0.0-beta.2"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

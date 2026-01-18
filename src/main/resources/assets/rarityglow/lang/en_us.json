@@ -1,0 +1,20 @@
+{
+  "text.autoconfig.rarityglow.title": "Rarity Glow",
+  "text.autoconfig.rarityglow.option.enable": "Enable Glow Effect",
+  "text.autoconfig.rarityglow.option.common": "Common Items",
+  "text.autoconfig.rarityglow.option.common.enabled": "Glow for Common Items",
+  "text.autoconfig.rarityglow.option.common.rgb": "Glow Color (R,G,B)",
+  "text.autoconfig.rarityglow.option.common.rgb.@Tooltip": "Format: R,G,B (e.g., 255,255,255)",
+  "text.autoconfig.rarityglow.option.uncommon": "Uncommon Items",
+  "text.autoconfig.rarityglow.option.uncommon.enabled": "Glow for Uncommon Items",
+  "text.autoconfig.rarityglow.option.uncommon.rgb": "Glow Color (R,G,B)",
+  "text.autoconfig.rarityglow.option.uncommon.rgb.@Tooltip": "Format: R,G,B (e.g., 255,255,85)",
+  "text.autoconfig.rarityglow.option.rare": "Rare Items",
+  "text.autoconfig.rarityglow.option.rare.enabled": "Glow for Rare Items",
+  "text.autoconfig.rarityglow.option.rare.rgb": "Glow Color (R,G,B)",
+  "text.autoconfig.rarityglow.option.rare.rgb.@Tooltip": "Format: R,G,B (e.g., 85,255,255)",
+  "text.autoconfig.rarityglow.option.epic": "Epic Items",
+  "text.autoconfig.rarityglow.option.epic.enabled": "Glow for Epic Items",
+  "text.autoconfig.rarityglow.option.epic.rgb": "Glow Color (R,G,B)",
+  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "Format: R,G,B (e.g., 255,85,255)"
+}

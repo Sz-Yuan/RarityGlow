@@ -1,0 +1,20 @@
+{
+  "text.autoconfig.rarityglow.title": "稀有度發光",
+  "text.autoconfig.rarityglow.option.enable": "啟用發光效果",
+  "text.autoconfig.rarityglow.option.common": "普通物品",
+  "text.autoconfig.rarityglow.option.common.enabled": "普通物品發光",
+  "text.autoconfig.rarityglow.option.common.rgb": "發光顏色 (紅,綠,藍)",
+  "text.autoconfig.rarityglow.option.common.rgb.@Tooltip": "輸入格式：R,G,B（例如：255,255,255）",
+  "text.autoconfig.rarityglow.option.uncommon": "罕見物品",
+  "text.autoconfig.rarityglow.option.uncommon.enabled": "罕見物品發光",
+  "text.autoconfig.rarityglow.option.uncommon.rgb": "發光顏色 (紅,綠,藍)",
+  "text.autoconfig.rarityglow.option.uncommon.rgb.@Tooltip": "輸入格式：R,G,B（例如：255,255,85）",
+  "text.autoconfig.rarityglow.option.rare": "稀有物品",
+  "text.autoconfig.rarityglow.option.rare.enabled": "稀有物品發光",
+  "text.autoconfig.rarityglow.option.rare.rgb": "發光顏色 (紅,綠,藍)",
+  "text.autoconfig.rarityglow.option.rare.rgb.@Tooltip": "輸入格式：R,G,B（例如：85,255,255）",
+  "text.autoconfig.rarityglow.option.epic": "史詩物品",
+  "text.autoconfig.rarityglow.option.epic.enabled": "史詩物品發光",
+  "text.autoconfig.rarityglow.option.epic.rgb": "發光顏色 (紅,綠,藍)",
+  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "輸入格式：R,G,B（例如：255,85,255）"
+}
