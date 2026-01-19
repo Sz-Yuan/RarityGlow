@@ -19,6 +19,7 @@ public class RarityGlow implements ClientModInitializer {
         AutoConfig.register(RarityGlowConfig.class, Toml4jConfigSerializer::new);
         var holder = AutoConfig.getConfigHolder(RarityGlowConfig.class);
         CONFIG = holder.getConfig();
+        GlowColorCache.updateFromConfig(CONFIG);
         updateGlobalState(CONFIG);
 
         holder.registerSaveListener((h, config) -> {
