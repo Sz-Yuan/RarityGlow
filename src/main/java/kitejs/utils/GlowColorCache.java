@@ -1,10 +1,10 @@
 package kitejs.utils;
 
 public class GlowColorCache {
-    public static volatile int COMMON_COLOR = 0xFFFFFFFF;
-    public static volatile int UNCOMMON_COLOR = 0xFFFFFF55;
-    public static volatile int RARE_COLOR = 0xFF55FFFF;
-    public static volatile int EPIC_COLOR = 0xFFFF55FF;
+    public static volatile int COMMON_COLOR;
+    public static volatile int UNCOMMON_COLOR;
+    public static volatile int RARE_COLOR;
+    public static volatile int EPIC_COLOR;
 
     public static void updateFromConfig(kitejs.config.RarityGlowConfig config) {
         COMMON_COLOR = parseRgbSafe(config.common.rgb, 0xFFFFFFFF);
