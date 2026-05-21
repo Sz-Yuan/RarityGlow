@@ -19,13 +19,13 @@ public class EntityRendererMixin<T extends Entity> {
     private void rarityglow$afterExtract(
             T entity,
             EntityRenderState state,
-            float tickDelta,
+            float partialTicks,
             CallbackInfo ci
     ) {
         if (entity instanceof ItemEntity itemEntity) {
-            var stack = itemEntity.getItem();
-            if (ItemRarityHelper.shouldGlow(stack)) {
-                state.outlineColor = ItemRarityHelper.getGlowColor(stack);
+            int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
+            if (color != -1) {
+                state.outlineColor = color;
             }
         }
     }

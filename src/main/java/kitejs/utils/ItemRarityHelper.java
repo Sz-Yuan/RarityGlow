@@ -5,26 +5,16 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemRarityHelper {
 
-    public static boolean shouldGlow(ItemStack stack) {
-        if (stack.isEmpty()) return false;
+    public static int getGlowColorIfEnabled(ItemStack stack) {
+        if (stack.isEmpty()) return -1;
         var config = RarityGlow.CONFIG;
-        if (!config.enable) return false;
+        if (!config.enable) return -1;
 
         return switch (stack.getRarity()) {
-            case COMMON -> config.common.enabled;
-            case UNCOMMON -> config.uncommon.enabled;
-            case RARE -> config.rare.enabled;
-            case EPIC -> config.epic.enabled;
-        };
-    }
-
-    public static int getGlowColor(ItemStack stack) {
-        if (stack.isEmpty()) return 0xFFFFFFFF;
-        return switch (stack.getRarity()) {
-            case COMMON -> GlowColorCache.COMMON_COLOR;
-            case UNCOMMON -> GlowColorCache.UNCOMMON_COLOR;
-            case RARE -> GlowColorCache.RARE_COLOR;
-            case EPIC -> GlowColorCache.EPIC_COLOR;
+            case COMMON -> config.common.enabled ? GlowColorCache.COMMON_COLOR : -1;
+            case UNCOMMON -> config.uncommon.enabled ? GlowColorCache.UNCOMMON_COLOR : -1;
+            case RARE -> config.rare.enabled ? GlowColorCache.RARE_COLOR : -1;
+            case EPIC -> config.epic.enabled ? GlowColorCache.EPIC_COLOR : -1;
         };
     }
 }

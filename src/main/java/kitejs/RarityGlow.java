@@ -11,7 +11,6 @@ public class RarityGlow implements ClientModInitializer {
     public static final String MOD_ID = "rarityglow";
     public static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(MOD_ID);
     public static volatile RarityGlowConfig CONFIG;
-    public static volatile boolean ANY_GLOW_ENABLED = true;
 
     @Override
     public void onInitializeClient() {
@@ -20,22 +19,11 @@ public class RarityGlow implements ClientModInitializer {
         var holder = AutoConfig.getConfigHolder(RarityGlowConfig.class);
         CONFIG = holder.getConfig();
         GlowColorCache.updateFromConfig(CONFIG);
-        updateGlobalState(CONFIG);
 
-        holder.registerSaveListener((h, config) -> {
+        holder.registerSaveListener((_, config) -> {
             CONFIG = config;
-            updateGlobalState(config);
             GlowColorCache.updateFromConfig(config);
             return InteractionResult.SUCCESS;
         });
-    }
-
-    private static void updateGlobalState(RarityGlowConfig config) {
-        ANY_GLOW_ENABLED = config.enable && (
-                config.common.enabled ||
-                        config.uncommon.enabled ||
-                        config.rare.enabled ||
-                        config.epic.enabled
-        );
     }
 }
