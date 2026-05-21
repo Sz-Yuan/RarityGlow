@@ -12,7 +12,7 @@
 	},
 	"license": "MIT",
 	"icon": "assets/rarityglow/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"client": [
 			"kitejs.RarityGlow"
