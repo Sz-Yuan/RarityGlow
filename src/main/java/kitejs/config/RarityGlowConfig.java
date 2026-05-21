@@ -20,6 +20,20 @@ public class RarityGlowConfig implements ConfigData {
     @ConfigEntry.Gui.CollapsibleObject
     public RaritySettings epic = new RaritySettings(true, "255,85,255");
 
+    @ConfigEntry.Gui.CollapsibleObject
+    public BeamSettings beam = new BeamSettings();
+
+    public static class BeamSettings {
+        @ConfigEntry.Gui.Tooltip
+        public boolean enabled = true;
+        @ConfigEntry.Gui.Tooltip
+        public int particleCount = 1;
+        @ConfigEntry.Gui.Tooltip
+        public double beamHeight = 1.5;
+        @ConfigEntry.Gui.Tooltip
+        public double beamOffset = 0.5;
+    }
+
     public static class RaritySettings {
         public boolean enabled = true;
         @ConfigEntry.Gui.Tooltip

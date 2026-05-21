@@ -16,5 +16,14 @@
   "text.autoconfig.rarityglow.option.epic": "Epic Items",
   "text.autoconfig.rarityglow.option.epic.enabled": "Glow for Epic Items",
   "text.autoconfig.rarityglow.option.epic.rgb": "Glow Color (R,G,B)",
-  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "Format: R,G,B (e.g., 255,85,255)"
+  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "Format: R,G,B (e.g., 255,85,255)",
+  "text.autoconfig.rarityglow.option.beam": "Particle Beam",
+  "text.autoconfig.rarityglow.option.beam.enabled": "Enable Beam",
+  "text.autoconfig.rarityglow.option.beam.enabled.@Tooltip": "Spawn colored particles above items",
+  "text.autoconfig.rarityglow.option.beam.particleCount": "Particles per Tick",
+  "text.autoconfig.rarityglow.option.beam.particleCount.@Tooltip": "How many particles per item each tick (1 = light, 3+ = dense)",
+  "text.autoconfig.rarityglow.option.beam.beamHeight": "Beam Height",
+  "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "How tall the particle column is (in blocks)",
+  "text.autoconfig.rarityglow.option.beam.beamOffset": "Vertical Offset",
+  "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "How high above the item to start the beam"
 }

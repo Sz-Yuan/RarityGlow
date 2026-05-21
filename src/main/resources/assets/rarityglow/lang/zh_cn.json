@@ -16,5 +16,14 @@
   "text.autoconfig.rarityglow.option.epic": "史诗物品",
   "text.autoconfig.rarityglow.option.epic.enabled": "史诗物品发光",
   "text.autoconfig.rarityglow.option.epic.rgb": "发光颜色 (红,绿,蓝)",
-  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "输入格式：R,G,B（例如：255,85,255）"
+  "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "输入格式：R,G,B（例如：255,85,255）",
+  "text.autoconfig.rarityglow.option.beam": "粒子光束",
+  "text.autoconfig.rarityglow.option.beam.enabled": "启用光束",
+  "text.autoconfig.rarityglow.option.beam.enabled.@Tooltip": "在物品上方生成彩色粒子光束",
+  "text.autoconfig.rarityglow.option.beam.particleCount": "每tick粒子数",
+  "text.autoconfig.rarityglow.option.beam.particleCount.@Tooltip": "每个物品每tick生成的粒子数（1=轻量，3+=密集）",
+  "text.autoconfig.rarityglow.option.beam.beamHeight": "光束高度",
+  "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "光柱的高度（方块数）",
+  "text.autoconfig.rarityglow.option.beam.beamOffset": "垂直偏移",
+  "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "光束从物品上方多高开始"
 }
