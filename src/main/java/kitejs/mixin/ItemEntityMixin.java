@@ -18,7 +18,7 @@ public class ItemEntityMixin {
 
         var entity = (ItemEntity) (Object) this;
         int color = ItemRarityHelper.getGlowColorIfEnabled(entity.getItem());
-        if (color == -1) return;
+        if (color == 0) return;
 
         ParticleGenerator.generateParticles(
                 entity, color,

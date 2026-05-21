@@ -1,14 +1,41 @@
-<a href="https://modrinth.com/mod/rarityglow">
-  <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg" width="128" alt="Modrinth"/>
-</a>
+# ✨ RarityGlow
 
-# RarityGlow
+<details>
+<summary><b>English</b></summary>
 
-为不同稀有度的物品添加动态发光效果。
+RarityGlow adds a **colored glow** to dropped items based on their rarity, with an optional **particle beam** effect.
 
-- **普通**：白色光晕
-- **罕见**：黄色光晕
-- **稀有**：青色光晕
-- **史诗**：品红色光晕
+| Rarity    | Color      |
+|-----------|------------|
+| Common    | White      |
+| Uncommon  | Yellow     |
+| Rare      | Cyan       |
+| Epic      | Magenta    |
 
-支持自定义每种稀有度的开关与 RGB 颜色。
+All colors and effects are fully customizable via **ModMenu** (config screen).
+
+<br>
+
+**Requires:** Fabric API, Cloth Config.
+
+</details>
+
+<details>
+<summary><b>中文</b></summary>
+
+RarityGlow 为掉落物添加**稀有度彩色发光**，可选**粒子光束**特效。
+
+| 稀有度 | 颜色 |
+|-----|----|
+| 普通  | 白色 |
+| 罕见  | 黄色 |
+| 稀有  | 青色 |
+| 史诗  | 品红 |
+
+所有颜色和效果均可在 **ModMenu** 配置界面中自由调整。
+
+<br>
+
+**依赖：** Fabric API、Cloth Config。
+
+</details>

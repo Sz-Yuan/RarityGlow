@@ -24,7 +24,7 @@ public class EntityRendererMixin<T extends Entity> {
     ) {
         if (entity instanceof ItemEntity itemEntity) {
             int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
-            if (color != -1) {
+            if (color != 0) {
                 state.outlineColor = color;
             }
         }

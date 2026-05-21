@@ -9,7 +9,7 @@ public class RarityGlowConfig implements ConfigData {
     public boolean enable = true;
 
     @ConfigEntry.Gui.CollapsibleObject
-    public RaritySettings common = new RaritySettings(true, "255,255,255");
+    public RaritySettings common = new RaritySettings(false, "255,255,255");
 
     @ConfigEntry.Gui.CollapsibleObject
     public RaritySettings uncommon = new RaritySettings(true, "255,255,85");
