@@ -9,23 +9,21 @@ public class RarityGlowConfig implements ConfigData {
     public boolean enable = true;
 
     @ConfigEntry.Gui.CollapsibleObject
-    public RaritySettings common = new RaritySettings(false, "255,255,255");
+    public RaritySettings common = new RaritySettings(false, false, "255,255,255");
 
     @ConfigEntry.Gui.CollapsibleObject
-    public RaritySettings uncommon = new RaritySettings(true, "255,255,85");
+    public RaritySettings uncommon = new RaritySettings(true, true, "255,255,85");
 
     @ConfigEntry.Gui.CollapsibleObject
-    public RaritySettings rare = new RaritySettings(true, "85,255,255");
+    public RaritySettings rare = new RaritySettings(true, true, "85,255,255");
 
     @ConfigEntry.Gui.CollapsibleObject
-    public RaritySettings epic = new RaritySettings(true, "255,85,255");
+    public RaritySettings epic = new RaritySettings(true, true, "255,85,255");
 
     @ConfigEntry.Gui.CollapsibleObject
     public BeamSettings beam = new BeamSettings();
 
     public static class BeamSettings {
-        @ConfigEntry.Gui.Tooltip
-        public boolean enabled = true;
         @ConfigEntry.Gui.Tooltip
         public int particleCount = 1;
         @ConfigEntry.Gui.Tooltip
@@ -37,14 +35,17 @@ public class RarityGlowConfig implements ConfigData {
     public static class RaritySettings {
         public boolean enabled = true;
         @ConfigEntry.Gui.Tooltip
+        public boolean beamEnabled = false;
+        @ConfigEntry.Gui.Tooltip
         public String rgb = "255,255,255";
 
         @SuppressWarnings("unused")
         public RaritySettings() {
         }
 
-        public RaritySettings(boolean enabled, String rgb) {
+        public RaritySettings(boolean enabled, boolean beamEnabled, String rgb) {
             this.enabled = enabled;
+            this.beamEnabled = beamEnabled;
             this.rgb = rgb;
         }
     }

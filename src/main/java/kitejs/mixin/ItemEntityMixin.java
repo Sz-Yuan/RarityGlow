@@ -14,10 +14,11 @@ public class ItemEntityMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void rarityglow$spawnBeamParticles(CallbackInfo ci) {
         var config = RarityGlow.CONFIG;
-        if (!config.beam.enabled) return;
 
         var entity = (ItemEntity) (Object) this;
-        int color = ItemRarityHelper.getGlowColorIfEnabled(entity.getItem());
+        if (!ItemRarityHelper.isBeamEnabled(entity.getItem())) return;
+
+        int color = ItemRarityHelper.getBeamColor(entity.getItem());
         if (color == 0) return;
 
         ParticleGenerator.generateParticles(
