@@ -28,7 +28,9 @@
   "text.autoconfig.rarityglow.option.beam.beamHeight": "光束高度",
   "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "光柱的高度（方块数）",
   "text.autoconfig.rarityglow.option.beam.beamWidth": "光束粗细",
-  "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "线条宽度（1=细，20=粗）",
+  "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "线条宽度 (1-10)",
+  "text.autoconfig.rarityglow.option.beam.maxRenderDistance": "最大渲染距离",
+  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "超出此距离的光束被隐藏 (最大 512)",
   "text.autoconfig.rarityglow.option.beam.beamOffset": "垂直偏移",
   "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "光束从物品上方多高开始"
 }

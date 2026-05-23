@@ -34,6 +34,9 @@ public class RarityGlowConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 1, max = 10)
         public int beamWidth = 5;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 1, max = 512)
+        public int maxRenderDistance = 32;
     }
 
     public static class RaritySettings {

@@ -44,7 +44,7 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         matrices.translate(-cam.x, -cam.y, -cam.z);
 
         MultiBufferSource.BufferSource bufferSource = context.bufferSource();
-        VertexConsumer vc = bufferSource.getBuffer(RenderTypes.lines());
+        VertexConsumer vc = bufferSource.getBuffer(RenderTypes.debugQuads());
 
         var pose = matrices.last().pose();
 
@@ -78,19 +78,48 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
             double distToCam = Math.sqrt(
                     (fx - cam.x) * (fx - cam.x) + (fy - cam.y) * (fy - cam.y) + (fz - cam.z) * (fz - cam.z)
             );
-            float adjustedWidth = (float) Math.max(1.0, config.beam.beamWidth * 5.0 / Math.max(distToCam, 0.5));
+            if (distToCam > config.beam.maxRenderDistance) continue;
 
-            // Bottom of beam
-            vc.addVertex(pose, fx, fy, fz)
-                    .setColor(r, g, b, 1f)
-                    .setNormal(0f, 1f, 0f)
-                    .setLineWidth(adjustedWidth);
+            float beamHeightF = (float) beamHeight;
+            float baseRadius = config.beam.beamWidth * 0.01f;
+            int sides = 8;
+            int vSegments = 12;
 
-            // Top of beam
-            vc.addVertex(pose, fx, fy + (float) beamHeight, fz)
-                    .setColor(r, g, b, 1f)
-                    .setNormal(0f, 1f, 0f)
-                    .setLineWidth(adjustedWidth);
+            for (int j = 0; j < vSegments; j++) {
+                float t0 = (float) j / vSegments;
+                float t1 = (float) (j + 1) / vSegments;
+
+                // Opacity gradient: 100% at bottom → 5% at top
+                float alpha0 = 1.0f - t0 * 0.95f;
+                float alpha1 = 1.0f - t1 * 0.95f;
+
+                // Radius taper: 100% at bottom → 5% at top
+                float radius0 = baseRadius * (1.0f - t0 * 0.95f);
+                float radius1 = baseRadius * (1.0f - t1 * 0.95f);
+
+                float y0 = fy + t0 * beamHeightF;
+                float y1 = fy + t1 * beamHeightF;
+
+                for (int i = 0; i < sides; i++) {
+                    float angle0 = (float) i / sides * (float) (Math.PI * 2);
+                    float angle1 = (float) (i + 1) / sides * (float) (Math.PI * 2);
+
+                    float x00 = fx + radius0 * Mth.cos(angle0);
+                    float z00 = fz + radius0 * Mth.sin(angle0);
+                    float x01 = fx + radius1 * Mth.cos(angle0);
+                    float z01 = fz + radius1 * Mth.sin(angle0);
+                    float x10 = fx + radius0 * Mth.cos(angle1);
+                    float z10 = fz + radius0 * Mth.sin(angle1);
+                    float x11 = fx + radius1 * Mth.cos(angle1);
+                    float z11 = fz + radius1 * Mth.sin(angle1);
+
+                    // Quad: bottom-left, bottom-right, top-right, top-left
+                    vc.addVertex(pose, x00, y0, z00).setColor(r, g, b, alpha0);
+                    vc.addVertex(pose, x10, y0, z10).setColor(r, g, b, alpha0);
+                    vc.addVertex(pose, x11, y1, z11).setColor(r, g, b, alpha1);
+                    vc.addVertex(pose, x01, y1, z01).setColor(r, g, b, alpha1);
+                }
+            }
         }
 
         bufferSource.endBatch();
