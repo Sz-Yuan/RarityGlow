@@ -6,7 +6,10 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 
 @Config(name = "rarityglow")
 public class RarityGlowConfig implements ConfigData {
-    public boolean enable = true;
+    @ConfigEntry.Gui.Tooltip
+    public boolean glowEnabled = true;
+    @ConfigEntry.Gui.Tooltip
+    public boolean beamEnabled = true;
 
     @ConfigEntry.Gui.CollapsibleObject
     public RaritySettings common = new RaritySettings(false, false, "255,255,255");
@@ -25,11 +28,12 @@ public class RarityGlowConfig implements ConfigData {
 
     public static class BeamSettings {
         @ConfigEntry.Gui.Tooltip
-        public int particleCount = 1;
-        @ConfigEntry.Gui.Tooltip
         public double beamHeight = 1.5;
         @ConfigEntry.Gui.Tooltip
         public double beamOffset = 0.5;
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 1, max = 10)
+        public int beamWidth = 5;
     }
 
     public static class RaritySettings {

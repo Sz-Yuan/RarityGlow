@@ -1,46 +1,41 @@
 package kitejs.utils;
 
 import kitejs.RarityGlow;
+import kitejs.config.RarityGlowConfig.RaritySettings;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 
 public class ItemRarityHelper {
+
+    private static RaritySettings settingsFor(Rarity rarity) {
+        var config = RarityGlow.CONFIG;
+        return switch (rarity) {
+            case COMMON -> config.common;
+            case UNCOMMON -> config.uncommon;
+            case RARE -> config.rare;
+            case EPIC -> config.epic;
+        };
+    }
 
     public static int getGlowColorIfEnabled(ItemStack stack) {
         if (stack.isEmpty()) return 0;
         var config = RarityGlow.CONFIG;
-        if (!config.enable) return 0;
+        if (!config.glowEnabled) return 0;
 
-        return switch (stack.getRarity()) {
-            case COMMON -> config.common.enabled ? GlowColorCache.COMMON_COLOR : 0;
-            case UNCOMMON -> config.uncommon.enabled ? GlowColorCache.UNCOMMON_COLOR : 0;
-            case RARE -> config.rare.enabled ? GlowColorCache.RARE_COLOR : 0;
-            case EPIC -> config.epic.enabled ? GlowColorCache.EPIC_COLOR : 0;
-        };
+        var settings = settingsFor(stack.getRarity());
+        return settings.enabled ? GlowColorCache.get(stack.getRarity()) : 0;
     }
 
-    public static boolean isBeamEnabled(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        var config = RarityGlow.CONFIG;
-        if (!config.enable) return false;
-
-        return switch (stack.getRarity()) {
-            case COMMON -> config.common.beamEnabled;
-            case UNCOMMON -> config.uncommon.beamEnabled;
-            case RARE -> config.rare.beamEnabled;
-            case EPIC -> config.epic.beamEnabled;
-        };
-    }
-
-    public static int getBeamColor(ItemStack stack) {
+    /**
+     * Returns the beam color for this stack's rarity, or 0 if the beam is disabled.
+     */
+    public static int getBeamColorIfEnabled(ItemStack stack) {
         if (stack.isEmpty()) return 0;
         var config = RarityGlow.CONFIG;
-        if (!config.enable) return 0;
+        if (!config.beamEnabled) return 0;
 
-        return switch (stack.getRarity()) {
-            case COMMON -> GlowColorCache.COMMON_COLOR;
-            case UNCOMMON -> GlowColorCache.UNCOMMON_COLOR;
-            case RARE -> GlowColorCache.RARE_COLOR;
-            case EPIC -> GlowColorCache.EPIC_COLOR;
-        };
+        var rarity = stack.getRarity();
+        if (!settingsFor(rarity).beamEnabled) return 0;
+        return GlowColorCache.get(rarity);
     }
 }

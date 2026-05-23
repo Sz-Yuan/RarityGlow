@@ -1,16 +1,22 @@
 package kitejs.utils;
 
+import net.minecraft.world.item.Rarity;
+import java.util.EnumMap;
+
 public class GlowColorCache {
-    public static volatile int COMMON_COLOR;
-    public static volatile int UNCOMMON_COLOR;
-    public static volatile int RARE_COLOR;
-    public static volatile int EPIC_COLOR;
+    private static volatile EnumMap<Rarity, Integer> COLORS = new EnumMap<>(Rarity.class);
+
+    public static int get(Rarity rarity) {
+        return COLORS.getOrDefault(rarity, 0);
+    }
 
     public static void updateFromConfig(kitejs.config.RarityGlowConfig config) {
-        COMMON_COLOR = parseRgbSafe(config.common.rgb, 0xFFFFFFFF);
-        UNCOMMON_COLOR = parseRgbSafe(config.uncommon.rgb, 0xFFFFFF55);
-        RARE_COLOR = parseRgbSafe(config.rare.rgb, 0xFF55FFFF);
-        EPIC_COLOR = parseRgbSafe(config.epic.rgb, 0xFFFF55FF);
+        var map = new EnumMap<Rarity, Integer>(Rarity.class);
+        map.put(Rarity.COMMON, parseRgbSafe(config.common.rgb, 0xFFFFFFFF));
+        map.put(Rarity.UNCOMMON, parseRgbSafe(config.uncommon.rgb, 0xFFFFFF55));
+        map.put(Rarity.RARE, parseRgbSafe(config.rare.rgb, 0xFF55FFFF));
+        map.put(Rarity.EPIC, parseRgbSafe(config.epic.rgb, 0xFFFF55FF));
+        COLORS = map;
     }
 
     private static int parseRgbSafe(String rgb, int fallback) {
@@ -22,7 +28,7 @@ public class GlowColorCache {
             int g = clamp(Integer.parseInt(parts[1].trim()));
             int b = clamp(Integer.parseInt(parts[2].trim()));
             return (255 << 24) | (r << 16) | (g << 8) | b;
-        } catch (Exception e) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             return fallback;
         }
     }
