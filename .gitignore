@@ -32,6 +32,10 @@ bin/
 
 run/
 
+# reasonix
+
+.reasonix/
+
 # java
 
 hs_err_*.log

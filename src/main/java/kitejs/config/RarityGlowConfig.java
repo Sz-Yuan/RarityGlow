@@ -30,7 +30,7 @@ public class RarityGlowConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public double beamHeight = 1.5;
         @ConfigEntry.Gui.Tooltip
-        public double beamOffset = 0.5;
+        public double beamOffset = 0.3;
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 1, max = 10)
         public int beamWidth = 5;
