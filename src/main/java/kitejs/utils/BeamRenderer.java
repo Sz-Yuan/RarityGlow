@@ -74,17 +74,23 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
             float fy = (float) (vy + beamOffset + bob);
             float fz = (float) vz;
 
+            // Distance-adjusted line width (screen-space lines appear thicker at distance)
+            double distToCam = Math.sqrt(
+                    (fx - cam.x) * (fx - cam.x) + (fy - cam.y) * (fy - cam.y) + (fz - cam.z) * (fz - cam.z)
+            );
+            float adjustedWidth = (float) Math.max(1.0, config.beam.beamWidth * 5.0 / Math.max(distToCam, 0.5));
+
             // Bottom of beam
             vc.addVertex(pose, fx, fy, fz)
                     .setColor(r, g, b, 1f)
                     .setNormal(0f, 1f, 0f)
-                    .setLineWidth(config.beam.beamWidth);
+                    .setLineWidth(adjustedWidth);
 
             // Top of beam
             vc.addVertex(pose, fx, fy + (float) beamHeight, fz)
                     .setColor(r, g, b, 1f)
                     .setNormal(0f, 1f, 0f)
-                    .setLineWidth(config.beam.beamWidth);
+                    .setLineWidth(adjustedWidth);
         }
 
         bufferSource.endBatch();
