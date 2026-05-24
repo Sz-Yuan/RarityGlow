@@ -32,7 +32,7 @@
   "text.autoconfig.rarityglow.option.beam.beamWidth": "光束粗細",
   "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "光束直徑 (1-10)",
   "text.autoconfig.rarityglow.option.beam.maxRenderDistance": "最大渲染距離",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "光束和發光的可見距離。受客戶端渲染距離限制，較大的值可能不會生效",
+  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "光束和發光的可見距離。受客戶端掉落物/實體渲染距離限制，較大的值可能不會生效",
   "text.autoconfig.rarityglow.option.beam.beamOffset": "垂直偏移",
   "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "光束從物品上方多高開始"
 }
