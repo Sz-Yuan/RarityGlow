@@ -1,40 +1,38 @@
 {
-	"schemaVersion": 1,
-	"id": "rarityglow",
-	"version": "${version}",
-	"name": "RarityGlow",
-	"description": "一个物品发光模组(❁´◡`❁)",
-	"authors": [
-		"KiteJs!"
-	],
-	"contact": {
-		"homepage": "https://github.com/Sz-Yuan/RarityGlow"
-	},
-	"license": "MIT",
-	"icon": "assets/rarityglow/icon.png",
-	"environment": "client",
-	"entrypoints": {
-		"client": [
-			"kitejs.RarityGlow"
-		],
-		"modmenu": [
-			"kitejs.config.ModMenuIntegration"
-		]
-	},
-	"mixins": [
-		"mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "26.1.x",
-		"java": ">=25",
-		"fabric-api": "*",
-		"cloth-config": ">=26.1.154"
-	},
-	"recommends": {
-		"modmenu": ">=18.0.0-alpha.8"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "rarityglow",
+  "version": "${version}",
+  "name": "RarityGlow",
+  "description": "一个物品发光模组(❁´◡`❁)",
+  "authors": [
+    "KiteJs!"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Sz-Yuan/RarityGlow"
+  },
+  "license": "MIT",
+  "icon": "assets/rarityglow/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "kitejs.RarityGlow"
+    ],
+    "modmenu": [
+      "kitejs.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "26.1.x",
+    "java": ">=25",
+    "fabric-api": "*",
+    "cloth-config": ">=26.1.154"
+  },
+  "recommends": {
+    "modmenu": ">=18.0.0-alpha.8"
+  },
+  "suggests": {}
 }

@@ -1,6 +1,7 @@
 package kitejs.utils;
 
 import net.minecraft.world.item.Rarity;
+
 import java.util.EnumMap;
 
 public class GlowColorCache {
