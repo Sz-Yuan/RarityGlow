@@ -1,6 +1,8 @@
 package kitejs.mixin;
 
+import kitejs.RarityGlow;
 import kitejs.utils.ItemRarityHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.world.entity.Entity;
@@ -24,9 +26,16 @@ public class EntityRendererMixin<T extends Entity> {
     ) {
         if (entity instanceof ItemEntity itemEntity) {
             int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
-            if (color != 0) {
-                state.outlineColor = color;
-            }
+            if (color == 0) return;
+
+            var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+            double maxDist = RarityGlow.CONFIG.beam.maxRenderDistance;
+            double dx = entity.getX() - camera.position().x;
+            double dy = entity.getY() - camera.position().y;
+            double dz = entity.getZ() - camera.position().z;
+            if (dx * dx + dy * dy + dz * dz > maxDist * maxDist) return;
+
+            state.outlineColor = color;
         }
     }
 }
