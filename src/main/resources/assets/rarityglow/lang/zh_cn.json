@@ -25,6 +25,8 @@
   "text.autoconfig.rarityglow.option.epic.rgb": "发光颜色 (红,绿,蓝)",
   "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "输入格式：R,G,B（例如：255,85,255）",
   "text.autoconfig.rarityglow.option.beam": "光束",
+  "text.autoconfig.rarityglow.option.beam.patternEnabled": "启用地面图案",
+  "text.autoconfig.rarityglow.option.beam.patternEnabled.@Tooltip": "掉落物下方的蜂巢六边形图案",
   "text.autoconfig.rarityglow.option.beam.beamHeight": "光束高度",
   "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "光柱的高度（方块数）",
   "text.autoconfig.rarityglow.option.beam.beamWidth": "光束粗细",

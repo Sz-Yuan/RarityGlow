@@ -81,7 +81,8 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
             );
             if (dist > config.beam.maxRenderDistance) continue;
 
-            // Draw hexagon edges as thin quads (visible from any angle)
+            // Honeycomb floor pattern (toggleable)
+            if (config.beam.patternEnabled) {
             // Honeycomb: center hexagon + 6 surrounding
             float cellRadius = 0.09f;
             float cellDist = cellRadius * (float) Math.sqrt(3);
@@ -139,6 +140,7 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
                     vc.addVertex(pose, vx[i] + nx, yTop, vz[i] + nz).setColor(data.r, data.g, data.b, 1.0f);
                 }
             }
+            } // end patternEnabled
             float beamHeightF = (float) beamHeight;
             float baseRadius = config.beam.beamWidth * 0.01f;
             int sides = 8;

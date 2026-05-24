@@ -28,6 +28,8 @@ public class RarityGlowConfig implements ConfigData {
 
     public static class BeamSettings {
         @ConfigEntry.Gui.Tooltip
+        public boolean patternEnabled = true;
+        @ConfigEntry.Gui.Tooltip
         public double beamHeight = 1.5;
         @ConfigEntry.Gui.Tooltip
         public double beamOffset = 0.3;

@@ -25,6 +25,8 @@
   "text.autoconfig.rarityglow.option.epic.rgb": "Glow Color (R,G,B)",
   "text.autoconfig.rarityglow.option.epic.rgb.@Tooltip": "Format: R,G,B (e.g., 255,85,255)",
   "text.autoconfig.rarityglow.option.beam": "Beam",
+  "text.autoconfig.rarityglow.option.beam.patternEnabled": "Enable Floor Pattern",
+  "text.autoconfig.rarityglow.option.beam.patternEnabled.@Tooltip": "Honeycomb hexagon pattern beneath dropped items",
   "text.autoconfig.rarityglow.option.beam.beamHeight": "Beam Height",
   "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "How tall the beam is (in blocks)",
   "text.autoconfig.rarityglow.option.beam.beamWidth": "Beam Width",
