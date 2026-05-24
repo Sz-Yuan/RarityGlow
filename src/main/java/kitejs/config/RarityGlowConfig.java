@@ -43,7 +43,6 @@ public class RarityGlowConfig implements ConfigData {
 
     public static class RaritySettings {
         public boolean enabled = true;
-        @ConfigEntry.Gui.Tooltip
         public boolean beamEnabled = false;
         @ConfigEntry.Gui.Tooltip
         public String rgb = "255,255,255";

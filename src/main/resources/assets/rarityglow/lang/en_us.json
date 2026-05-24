@@ -32,7 +32,7 @@
   "text.autoconfig.rarityglow.option.beam.beamWidth": "Beam Width",
   "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "Beam diameter (1-10)",
   "text.autoconfig.rarityglow.option.beam.maxRenderDistance": "Max Render Distance",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "Render distance for beam and glow. Values beyond vanilla entity tracking distance may not take effect",
+  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "Render distance for beam and glow. Also limited by client render distance; higher values may not take effect",
   "text.autoconfig.rarityglow.option.beam.beamOffset": "Vertical Offset",
   "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "How high above the item to start the beam"
 }
