@@ -17,16 +17,18 @@ import org.jspecify.annotations.NonNull;
 
 public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures {
 
-    private record BeamEntity(float fx, float fy, float fz, float r, float g, float b) {
-        static BeamEntity forEntity(ItemEntity entity, float partialTicks, float beamOffset) {
+    private record BeamCameraRel(float fx, float fy, float fz, float r, float g, float b) {
+        static BeamCameraRel forEntity(ItemEntity entity, float partialTicks, double beamOffset, Vec3 cameraPos) {
             double vx = Mth.lerp(partialTicks, entity.xOld, entity.getX());
             double vy = Mth.lerp(partialTicks, entity.yOld, entity.getY());
             double vz = Mth.lerp(partialTicks, entity.zOld, entity.getZ());
             float ageInTicks = entity.tickCount + partialTicks;
             float bob = Mth.sin(ageInTicks / 10.0F + entity.bobOffs) * 0.1F + 0.1F;
-            float fx = (float) vx;
-            float fy = (float) (vy + beamOffset + bob);
-            float fz = (float) vz;
+            // Camera-relative coordinates — computed in double, stored as float.
+            // Values are small (within render distance), so float precision is fine.
+            float fx = (float) (vx - cameraPos.x);
+            float fy = (float) (vy - cameraPos.y + beamOffset + bob);
+            float fz = (float) (vz - cameraPos.z);
 
             int packedColor = ItemRarityHelper.getBeamColorIfEnabled(entity.getItem());
             if (packedColor == 0) return null;
@@ -34,7 +36,7 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
             float g = ((packedColor >> 8) & 0xFF) / 255f;
             float b = (packedColor & 0xFF) / 255f;
 
-            return new BeamEntity(fx, fy, fz, r, g, b);
+            return new BeamCameraRel(fx, fy, fz, r, g, b);
         }
     }
 
@@ -63,7 +65,6 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
 
         PoseStack matrices = context.poseStack();
         matrices.pushPose();
-        matrices.translate(-cam.x, -cam.y, -cam.z);
 
         MultiBufferSource.BufferSource bufferSource = context.bufferSource();
 
@@ -74,12 +75,14 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         for (var entity : world.entitiesForRendering()) {
             if (!(entity instanceof ItemEntity itemEntity)) continue;
             float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
-            BeamEntity data = BeamEntity.forEntity(itemEntity, partialTicks, (float) beamOffset);
+            BeamCameraRel data = BeamCameraRel.forEntity(itemEntity, partialTicks, beamOffset, cam);
             if (data == null) continue;
-            double dist = Math.sqrt(
-                    (data.fx - cam.x) * (data.fx - cam.x) + (data.fy - cam.y) * (data.fy - cam.y) + (data.fz - cam.z) * (data.fz - cam.z)
-            );
-            if (dist > config.beam.maxRenderDistance) continue;
+            float dx = data.fx;
+            float dy = data.fy;
+            float dz = data.fz;
+            double distSq = (double) dx * dx + (double) dy * dy + (double) dz * dz;
+            double maxDist = config.beam.maxRenderDistance;
+            if (distSq > maxDist * maxDist) continue;
 
             // Honeycomb floor pattern (toggleable)
             if (config.beam.patternEnabled) {
@@ -101,10 +104,10 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
                         (float) (7 * Math.PI / 6), (float) (3 * Math.PI / 2), (float) (11 * Math.PI / 6)
                 };
                 float barWidth = 0.008f;
-                float hexY = data.fy - (float) beamOffset + 0.005f;
+                float hexY = dy - (float) beamOffset + 0.005f;
                 for (float[] cell : cellCenters) {
-                    float cx = data.fx + cell[0];
-                    float cz = data.fz + cell[1];
+                    float cx = dx + cell[0];
+                    float cz = dz + cell[1];
 
                     // Precompute 6 vertices
                     float[] vx = new float[6];
@@ -126,12 +129,12 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
                     // Outline: 6 opaque thin bars
                     for (int i = 0; i < 6; i++) {
                         int next = (i + 1) % 6;
-                        float dx = vx[next] - vx[i];
-                        float dz = vz[next] - vz[i];
-                        float len = Mth.sqrt(dx * dx + dz * dz);
+                        float ddx = vx[next] - vx[i];
+                        float ddz = vz[next] - vz[i];
+                        float len = Mth.sqrt(ddx * ddx + ddz * ddz);
                         if (len < 0.001f) continue;
-                        float nx = dz / len * barWidth * 0.5f;
-                        float nz = -dx / len * barWidth * 0.5f;
+                        float nx = ddz / len * barWidth * 0.5f;
+                        float nz = -ddx / len * barWidth * 0.5f;
                         float yBot = hexY - barWidth * 0.5f;
                         float yTop = hexY + barWidth * 0.5f;
                         vc.addVertex(pose, vx[i] - nx, yBot, vz[i] - nz).setColor(data.r, data.g, data.b, 1.0f);
@@ -154,21 +157,21 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
                 float alpha1 = 1.0f - t1 * 0.95f;
                 float radius0 = baseRadius * (1.0f - t0 * 0.95f);
                 float radius1 = baseRadius * (1.0f - t1 * 0.95f);
-                float y0 = data.fy + t0 * beamHeightF;
-                float y1 = data.fy + t1 * beamHeightF;
+                float y0 = dy + t0 * beamHeightF;
+                float y1 = dy + t1 * beamHeightF;
 
                 for (int i = 0; i < sides; i++) {
                     float angle0 = (float) i / sides * (float) (Math.PI * 2);
                     float angle1 = (float) (i + 1) / sides * (float) (Math.PI * 2);
 
-                    float x00 = data.fx + radius0 * Mth.cos(angle0);
-                    float z00 = data.fz + radius0 * Mth.sin(angle0);
-                    float x01 = data.fx + radius1 * Mth.cos(angle0);
-                    float z01 = data.fz + radius1 * Mth.sin(angle0);
-                    float x10 = data.fx + radius0 * Mth.cos(angle1);
-                    float z10 = data.fz + radius0 * Mth.sin(angle1);
-                    float x11 = data.fx + radius1 * Mth.cos(angle1);
-                    float z11 = data.fz + radius1 * Mth.sin(angle1);
+                    float x00 = dx + radius0 * Mth.cos(angle0);
+                    float z00 = dz + radius0 * Mth.sin(angle0);
+                    float x01 = dx + radius1 * Mth.cos(angle0);
+                    float z01 = dz + radius1 * Mth.sin(angle0);
+                    float x10 = dx + radius0 * Mth.cos(angle1);
+                    float z10 = dz + radius0 * Mth.sin(angle1);
+                    float x11 = dx + radius1 * Mth.cos(angle1);
+                    float z11 = dz + radius1 * Mth.sin(angle1);
 
                     vc.addVertex(pose, x00, y0, z00).setColor(data.r, data.g, data.b, alpha0);
                     vc.addVertex(pose, x10, y0, z10).setColor(data.r, data.g, data.b, alpha0);
