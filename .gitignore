@@ -32,10 +32,6 @@ bin/
 
 run/
 
-# reasonix
-
-.reasonix/
-REASONIX.md
 CHANGELOG.md
 
 # java
