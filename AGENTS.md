@@ -57,6 +57,8 @@ TOML 文件位于 `<游戏目录>/config/rarityglow.toml`，由 AutoConfig 管�
 - **空值安全：** 用 early return 守护 world/camera/entity。对 Fabric API 回调参数使用 `@NonNull`。
 - **资源命名空间：** 语言键遵循 `text.autoconfig.rarityglow.option.<section>.<key>` 格式。
 
+- **Minecraft 源码参考：** `mcsrc/26.1/` 目录包含 Minecraft 26.1 的反编译源码，可用于查阅原版类/方法的实现细节。该目录为只读参考，不要修改。
+
 ## 备注
 
 *留空，随时补充。*
