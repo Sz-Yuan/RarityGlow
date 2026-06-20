@@ -5,6 +5,8 @@ import kitejs.config.RarityGlowConfig.RaritySettings;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 
+import java.util.function.Function;
+
 public class ItemRarityHelper {
 
     private static RaritySettings settingsFor(Rarity rarity) {
@@ -17,25 +19,32 @@ public class ItemRarityHelper {
         };
     }
 
-    public static int getGlowColorIfEnabled(ItemStack stack) {
+    private static int getColorIfEnabled(ItemStack stack, boolean masterSwitch,
+                                         Function<RaritySettings, Boolean> rarityToggle) {
         if (stack.isEmpty()) return 0;
-        var config = RarityGlow.CONFIG;
-        if (!config.glowEnabled) return 0;
+        if (!masterSwitch) return 0;
+        var rarity = stack.getRarity();
+        if (!rarityToggle.apply(settingsFor(rarity))) return 0;
+        return GlowColorCache.get(rarity);
+    }
 
-        var settings = settingsFor(stack.getRarity());
-        return settings.enabled ? GlowColorCache.get(stack.getRarity()) : 0;
+    public static int getGlowColorIfEnabled(ItemStack stack) {
+        return getColorIfEnabled(stack, RarityGlow.CONFIG.glowEnabled, s -> s.enabled);
+    }
+
+    public static int getBeamColorIfEnabled(ItemStack stack) {
+        return getColorIfEnabled(stack, RarityGlow.CONFIG.beamEnabled, s -> s.beamEnabled);
     }
 
     /**
-     * Returns the beam color for this stack's rarity, or 0 if the beam is disabled.
+     * Returns true if beam rendering is enabled for at least one rarity tier.
+     * Used as a fast-path early exit before iterating entities.
      */
-    public static int getBeamColorIfEnabled(ItemStack stack) {
-        if (stack.isEmpty()) return 0;
+    public static boolean anyBeamEnabled() {
         var config = RarityGlow.CONFIG;
-        if (!config.beamEnabled) return 0;
-
-        var rarity = stack.getRarity();
-        if (!settingsFor(rarity).beamEnabled) return 0;
-        return GlowColorCache.get(rarity);
+        return config.common.beamEnabled
+                || config.uncommon.beamEnabled
+                || config.rare.beamEnabled
+                || config.epic.beamEnabled;
     }
 }

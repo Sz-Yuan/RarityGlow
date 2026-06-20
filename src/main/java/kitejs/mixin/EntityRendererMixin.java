@@ -25,15 +25,16 @@ public class EntityRendererMixin<T extends Entity> {
             CallbackInfo ci
     ) {
         if (entity instanceof ItemEntity itemEntity) {
-            int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
-            if (color == 0) return;
-
+            // Distance check first — cheaper than color lookup
             var camera = Minecraft.getInstance().gameRenderer.mainCamera();
             double maxDist = RarityGlow.CONFIG.beam.maxRenderDistance;
             double dx = entity.getX() - camera.position().x;
             double dy = entity.getY() - camera.position().y;
             double dz = entity.getZ() - camera.position().z;
             if (dx * dx + dy * dy + dz * dz > maxDist * maxDist) return;
+
+            int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
+            if (color == 0) return;
 
             state.outlineColor = color;
         }

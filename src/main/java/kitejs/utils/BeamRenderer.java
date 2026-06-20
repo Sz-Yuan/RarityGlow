@@ -1,6 +1,7 @@
 package kitejs.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import kitejs.RarityGlow;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
@@ -18,10 +19,22 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures {
 
-    private static float[][] honeycombCellCenters(float cellRadius) {
-        float cellDist = cellRadius * (float) Math.sqrt(3);
-        float cellZOff = cellRadius * 1.5f;
-        return new float[][] {
+    // --- Honeycomb constants (cellRadius = 0.09f) ---
+    private static final float CELL_RADIUS = 0.09f;
+    private static final float[][] HEX_CENTERS;
+    private static final float[] HEX_COS = new float[6];
+    private static final float[] HEX_SIN = new float[6];
+    private static final int[][] FILL_QUADS = {{0, 1, 2}, {2, 3, 4}, {4, 5, 0}};
+
+    // --- Beam pillar constants (8 sides) ---
+    private static final int BEAM_SIDES = 8;
+    private static final float[] BEAM_COS = new float[BEAM_SIDES];
+    private static final float[] BEAM_SIN = new float[BEAM_SIDES];
+
+    static {
+        float cellDist = CELL_RADIUS * (float) Math.sqrt(3);
+        float cellZOff = CELL_RADIUS * 1.5f;
+        HEX_CENTERS = new float[][] {
                 {0, 0},
                 {cellDist, 0},
                 {cellDist * 0.5f, -cellZOff},
@@ -30,6 +43,21 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
                 {-cellDist * 0.5f, cellZOff},
                 {cellDist * 0.5f, cellZOff},
         };
+
+        float[] hexAngles = {
+                (float) (Math.PI / 6), (float) (Math.PI / 2), (float) (5 * Math.PI / 6),
+                (float) (7 * Math.PI / 6), (float) (3 * Math.PI / 2), (float) (11 * Math.PI / 6)
+        };
+        for (int i = 0; i < 6; i++) {
+            HEX_COS[i] = Mth.cos(hexAngles[i]);
+            HEX_SIN[i] = Mth.sin(hexAngles[i]);
+        }
+
+        for (int i = 0; i < BEAM_SIDES; i++) {
+            float angle = (float) i / BEAM_SIDES * (float) (Math.PI * 2);
+            BEAM_COS[i] = Mth.cos(angle);
+            BEAM_SIN[i] = Mth.sin(angle);
+        }
     }
 
     private record BeamCameraRel(float fx, float fy, float fz, float r, float g, float b) {
@@ -67,16 +95,18 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         double beamOffset = config.beam.beamOffset;
         if (beamHeight <= 0) return;
 
-        // Early exit: no beam enabled for any rarity
-        if (!config.common.beamEnabled
-                && !config.uncommon.beamEnabled
-                && !config.rare.beamEnabled
-                && !config.epic.beamEnabled) {
-            return;
-        }
+        if (!ItemRarityHelper.anyBeamEnabled()) return;
 
         Camera camera = Minecraft.getInstance().gameRenderer.mainCamera();
         Vec3 cam = camera.position();
+
+        float beamHeightF = (float) beamHeight;
+        float baseRadius = config.beam.beamWidth * 0.01f;
+        int vSegments = 12;
+        double maxDist = config.beam.maxRenderDistance;
+        double maxDistSq = maxDist * maxDist;
+        boolean patternEnabled = config.beam.patternEnabled;
+        float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
         PoseStack matrices = context.poseStack();
         matrices.pushPose();
@@ -86,104 +116,90 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         submitNodeCollector.submitCustomGeometry(matrices, RenderTypes.debugQuads(), (pose, vc) -> {
             for (var entity : world.entitiesForRendering()) {
                 if (!(entity instanceof ItemEntity itemEntity)) continue;
-                float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
                 BeamCameraRel data = BeamCameraRel.forEntity(itemEntity, partialTicks, beamOffset, cam);
                 if (data == null) continue;
-                float dx = data.fx;
-                float dy = data.fy;
-                float dz = data.fz;
-                double distSq = (double) dx * dx + (double) dy * dy + (double) dz * dz;
-                double maxDist = config.beam.maxRenderDistance;
-                if (distSq > maxDist * maxDist) continue;
 
-                // Honeycomb floor pattern (toggleable)
-                if (config.beam.patternEnabled) {
-                    // Honeycomb: center hexagon + 6 surrounding
-                    float cellRadius = 0.09f;
-                    float[][] cellCenters = honeycombCellCenters(cellRadius);
-                    float[] angles = {
-                            (float) (Math.PI / 6), (float) (Math.PI / 2), (float) (5 * Math.PI / 6),
-                            (float) (7 * Math.PI / 6), (float) (3 * Math.PI / 2), (float) (11 * Math.PI / 6)
-                    };
-                    float barWidth = 0.008f;
-                    float hexY = dy - (float) beamOffset + 0.005f;
-                    for (float[] cell : cellCenters) {
-                        float cx = dx + cell[0];
-                        float cz = dz + cell[1];
+                double distSq = (double) data.fx * data.fx + (double) data.fy * data.fy + (double) data.fz * data.fz;
+                if (distSq > maxDistSq) continue;
 
-                        // Precompute 6 vertices
-                        float[] vx = new float[6];
-                        float[] vz = new float[6];
-                        for (int i = 0; i < 6; i++) {
-                            vx[i] = cx + cellRadius * Mth.cos(angles[i]);
-                            vz[i] = cz + cellRadius * Mth.sin(angles[i]);
-                        }
-
-                        // Fill: 3 quads with 50% opacity
-                        int[][] fillQuads = {{0, 1, 2}, {2, 3, 4}, {4, 5, 0}};
-                        for (int[] tri : fillQuads) {
-                            vc.addVertex(pose, cx, hexY, cz).setColor(data.r, data.g, data.b, 0.5f);
-                            vc.addVertex(pose, vx[tri[0]], hexY, vz[tri[0]]).setColor(data.r, data.g, data.b, 0.5f);
-                            vc.addVertex(pose, vx[tri[1]], hexY, vz[tri[1]]).setColor(data.r, data.g, data.b, 0.5f);
-                            vc.addVertex(pose, vx[tri[2]], hexY, vz[tri[2]]).setColor(data.r, data.g, data.b, 0.5f);
-                        }
-
-                        // Outline: 6 opaque thin bars
-                        for (int i = 0; i < 6; i++) {
-                            int next = (i + 1) % 6;
-                            float ddx = vx[next] - vx[i];
-                            float ddz = vz[next] - vz[i];
-                            float len = Mth.sqrt(ddx * ddx + ddz * ddz);
-                            if (len < 0.001f) continue;
-                            float nx = ddz / len * barWidth * 0.5f;
-                            float nz = -ddx / len * barWidth * 0.5f;
-                            float yBot = hexY - barWidth * 0.5f;
-                            float yTop = hexY + barWidth * 0.5f;
-                            vc.addVertex(pose, vx[i] - nx, yBot, vz[i] - nz).setColor(data.r, data.g, data.b, 1.0f);
-                            vc.addVertex(pose, vx[next] - nx, yBot, vz[next] - nz).setColor(data.r, data.g, data.b, 1.0f);
-                            vc.addVertex(pose, vx[next] + nx, yTop, vz[next] + nz).setColor(data.r, data.g, data.b, 1.0f);
-                            vc.addVertex(pose, vx[i] + nx, yTop, vz[i] + nz).setColor(data.r, data.g, data.b, 1.0f);
-                        }
-                    }
-                } // end patternEnabled
-                float beamHeightF = (float) beamHeight;
-                float baseRadius = config.beam.beamWidth * 0.01f;
-                int sides = 8;
-                int vSegments = 12;
-
-                for (int j = 0; j < vSegments; j++) {
-                    float t0 = (float) j / vSegments;
-                    float t1 = (float) (j + 1) / vSegments;
-
-                    float alpha0 = 1.0f - t0 * 0.95f;
-                    float alpha1 = 1.0f - t1 * 0.95f;
-                    float radius0 = baseRadius * (1.0f - t0 * 0.95f);
-                    float radius1 = baseRadius * (1.0f - t1 * 0.95f);
-                    float y0 = dy + t0 * beamHeightF;
-                    float y1 = dy + t1 * beamHeightF;
-
-                    for (int i = 0; i < sides; i++) {
-                        float angle0 = (float) i / sides * (float) (Math.PI * 2);
-                        float angle1 = (float) (i + 1) / sides * (float) (Math.PI * 2);
-
-                        float x00 = dx + radius0 * Mth.cos(angle0);
-                        float z00 = dz + radius0 * Mth.sin(angle0);
-                        float x01 = dx + radius1 * Mth.cos(angle0);
-                        float z01 = dz + radius1 * Mth.sin(angle0);
-                        float x10 = dx + radius0 * Mth.cos(angle1);
-                        float z10 = dz + radius0 * Mth.sin(angle1);
-                        float x11 = dx + radius1 * Mth.cos(angle1);
-                        float z11 = dz + radius1 * Mth.sin(angle1);
-
-                        vc.addVertex(pose, x00, y0, z00).setColor(data.r, data.g, data.b, alpha0);
-                        vc.addVertex(pose, x10, y0, z10).setColor(data.r, data.g, data.b, alpha0);
-                        vc.addVertex(pose, x11, y1, z11).setColor(data.r, data.g, data.b, alpha1);
-                        vc.addVertex(pose, x01, y1, z01).setColor(data.r, data.g, data.b, alpha1);
-                    }
+                if (patternEnabled) {
+                    drawHoneycomb(pose, vc, data, beamOffset);
                 }
+                drawBeamPillar(pose, vc, data, beamHeightF, baseRadius, vSegments);
             }
         });
 
         matrices.popPose();
+    }
+
+    private static void drawHoneycomb(PoseStack.Pose pose, VertexConsumer vc, BeamCameraRel data, double beamOffset) {
+        float barWidth = 0.008f;
+        float hexY = data.fy - (float) beamOffset + 0.005f;
+
+        // Reusable vertex arrays
+        float[] vx = new float[6];
+        float[] vz = new float[6];
+
+        for (float[] cell : HEX_CENTERS) {
+            float cx = data.fx + cell[0];
+            float cz = data.fz + cell[1];
+
+            for (int i = 0; i < 6; i++) {
+                vx[i] = cx + CELL_RADIUS * HEX_COS[i];
+                vz[i] = cz + CELL_RADIUS * HEX_SIN[i];
+            }
+
+            // Fill: 3 quads with 50% opacity
+            for (int[] tri : FILL_QUADS) {
+                vc.addVertex(pose, cx, hexY, cz).setColor(data.r, data.g, data.b, 0.5f);
+                vc.addVertex(pose, vx[tri[0]], hexY, vz[tri[0]]).setColor(data.r, data.g, data.b, 0.5f);
+                vc.addVertex(pose, vx[tri[1]], hexY, vz[tri[1]]).setColor(data.r, data.g, data.b, 0.5f);
+                vc.addVertex(pose, vx[tri[2]], hexY, vz[tri[2]]).setColor(data.r, data.g, data.b, 0.5f);
+            }
+
+            // Outline: 6 opaque thin bars
+            for (int i = 0; i < 6; i++) {
+                int next = (i + 1) % 6;
+                float ddx = vx[next] - vx[i];
+                float ddz = vz[next] - vz[i];
+                float len = Mth.sqrt(ddx * ddx + ddz * ddz);
+                if (len < 0.001f) continue;
+                float nx = ddz / len * barWidth * 0.5f;
+                float nz = -ddx / len * barWidth * 0.5f;
+                float yBot = hexY - barWidth * 0.5f;
+                float yTop = hexY + barWidth * 0.5f;
+                vc.addVertex(pose, vx[i] - nx, yBot, vz[i] - nz).setColor(data.r, data.g, data.b, 1.0f);
+                vc.addVertex(pose, vx[next] - nx, yBot, vz[next] - nz).setColor(data.r, data.g, data.b, 1.0f);
+                vc.addVertex(pose, vx[next] + nx, yTop, vz[next] + nz).setColor(data.r, data.g, data.b, 1.0f);
+                vc.addVertex(pose, vx[i] + nx, yTop, vz[i] + nz).setColor(data.r, data.g, data.b, 1.0f);
+            }
+        }
+    }
+
+    private static void drawBeamPillar(PoseStack.Pose pose, VertexConsumer vc, BeamCameraRel data,
+                                       float beamHeightF, float baseRadius, int vSegments) {
+        for (int j = 0; j < vSegments; j++) {
+            float t0 = (float) j / vSegments;
+            float t1 = (float) (j + 1) / vSegments;
+
+            float fade = 1.0f - t0 * 0.95f;
+            float fadeNext = 1.0f - t1 * 0.95f;
+            float radius0 = baseRadius * fade;
+            float radius1 = baseRadius * fadeNext;
+            float y0 = data.fy + t0 * beamHeightF;
+            float y1 = data.fy + t1 * beamHeightF;
+
+            for (int i = 0; i < BEAM_SIDES; i++) {
+                float cos0 = BEAM_COS[i];
+                float sin0 = BEAM_SIN[i];
+                float cos1 = BEAM_COS[(i + 1) % BEAM_SIDES];
+                float sin1 = BEAM_SIN[(i + 1) % BEAM_SIDES];
+
+                vc.addVertex(pose, data.fx + radius0 * cos0, y0, data.fz + radius0 * sin0).setColor(data.r, data.g, data.b, fade);
+                vc.addVertex(pose, data.fx + radius0 * cos1, y0, data.fz + radius0 * sin1).setColor(data.r, data.g, data.b, fade);
+                vc.addVertex(pose, data.fx + radius1 * cos1, y1, data.fz + radius1 * sin1).setColor(data.r, data.g, data.b, fadeNext);
+                vc.addVertex(pose, data.fx + radius1 * cos0, y1, data.fz + radius1 * sin0).setColor(data.r, data.g, data.b, fadeNext);
+            }
+        }
     }
 }
