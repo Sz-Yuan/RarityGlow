@@ -4,6 +4,8 @@
   "text.autoconfig.rarityglow.option.glowEnabled.@Tooltip": "總開關 — 覆蓋各稀有度的發光開關",
   "text.autoconfig.rarityglow.option.beamEnabled": "啟用光束",
   "text.autoconfig.rarityglow.option.beamEnabled.@Tooltip": "總開關 — 覆蓋各稀有度的光束開關",
+  "text.autoconfig.rarityglow.option.maxRenderDistance": "最大渲染距離",
+  "text.autoconfig.rarityglow.option.maxRenderDistance.@Tooltip": "光束和發光的可見距離。受客戶端掉落物/實體渲染距離限制，較大的值可能不會生效",
   "text.autoconfig.rarityglow.option.common": "普通物品",
   "text.autoconfig.rarityglow.option.common.enabled": "普通物品發光",
   "text.autoconfig.rarityglow.option.common.beamEnabled": "普通物品光束",
@@ -31,8 +33,6 @@
   "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "光柱的高度（方塊數）",
   "text.autoconfig.rarityglow.option.beam.beamWidth": "光束粗細",
   "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "光束直徑 (1-10)",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance": "最大渲染距離",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "光束和發光的可見距離。受客戶端掉落物/實體渲染距離限制，較大的值可能不會生效",
   "text.autoconfig.rarityglow.option.beam.beamOffset": "垂直偏移",
   "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "光束從物品上方多高開始"
 }

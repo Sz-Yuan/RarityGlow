@@ -4,6 +4,8 @@
   "text.autoconfig.rarityglow.option.glowEnabled.@Tooltip": "Master switch — overrides per-rarity glow toggles",
   "text.autoconfig.rarityglow.option.beamEnabled": "Enable Beam",
   "text.autoconfig.rarityglow.option.beamEnabled.@Tooltip": "Master switch — overrides per-rarity beam toggles",
+  "text.autoconfig.rarityglow.option.maxRenderDistance": "Max Render Distance",
+  "text.autoconfig.rarityglow.option.maxRenderDistance.@Tooltip": "Render distance for beam and glow. Also limited by client item/entity render distance; higher values may not take effect",
   "text.autoconfig.rarityglow.option.common": "Common Items",
   "text.autoconfig.rarityglow.option.common.enabled": "Glow for Common Items",
   "text.autoconfig.rarityglow.option.common.beamEnabled": "Beam for Common Items",
@@ -31,8 +33,6 @@
   "text.autoconfig.rarityglow.option.beam.beamHeight.@Tooltip": "How tall the beam is (in blocks)",
   "text.autoconfig.rarityglow.option.beam.beamWidth": "Beam Width",
   "text.autoconfig.rarityglow.option.beam.beamWidth.@Tooltip": "Beam diameter (1-10)",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance": "Max Render Distance",
-  "text.autoconfig.rarityglow.option.beam.maxRenderDistance.@Tooltip": "Render distance for beam and glow. Also limited by client item/entity render distance; higher values may not take effect",
   "text.autoconfig.rarityglow.option.beam.beamOffset": "Vertical Offset",
   "text.autoconfig.rarityglow.option.beam.beamOffset.@Tooltip": "How high above the item to start the beam"
 }

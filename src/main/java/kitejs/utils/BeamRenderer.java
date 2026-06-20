@@ -103,7 +103,7 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         float beamHeightF = (float) beamHeight;
         float baseRadius = config.beam.beamWidth * 0.01f;
         int vSegments = 12;
-        double maxDist = config.beam.maxRenderDistance;
+        double maxDist = config.maxRenderDistance;
         double maxDistSq = maxDist * maxDist;
         boolean patternEnabled = config.beam.patternEnabled;
         float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);

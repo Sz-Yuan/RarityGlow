@@ -10,6 +10,9 @@ public class RarityGlowConfig implements ConfigData {
     public boolean glowEnabled = true;
     @ConfigEntry.Gui.Tooltip
     public boolean beamEnabled = true;
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 256)
+    public int maxRenderDistance = 24;
 
     @ConfigEntry.Gui.CollapsibleObject
     public RaritySettings common = new RaritySettings(false, false, "255,255,255");
@@ -36,9 +39,6 @@ public class RarityGlowConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 1, max = 10)
         public int beamWidth = 5;
-        @ConfigEntry.Gui.Tooltip
-        @ConfigEntry.BoundedDiscrete(min = 1, max = 256)
-        public int maxRenderDistance = 24;
     }
 
     public static class RaritySettings {
