@@ -28,7 +28,7 @@ public class EntityRendererMixin<T extends Entity> {
             int color = ItemRarityHelper.getGlowColorIfEnabled(itemEntity.getItem());
             if (color == 0) return;
 
-            var camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+            var camera = Minecraft.getInstance().gameRenderer.mainCamera();
             double maxDist = RarityGlow.CONFIG.beam.maxRenderDistance;
             double dx = entity.getX() - camera.position().x;
             double dy = entity.getY() - camera.position().y;
