@@ -136,7 +136,6 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         float barWidth = 0.008f;
         float hexY = data.fy - (float) beamOffset + 0.005f;
 
-        // Reusable vertex arrays
         float[] vx = new float[6];
         float[] vz = new float[6];
 
