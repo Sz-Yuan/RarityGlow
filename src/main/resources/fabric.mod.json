@@ -25,14 +25,14 @@
     "mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.19.3",
-    "minecraft": "26.2",
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
     "java": ">=25",
     "fabric-api": "*",
-    "cloth-config": ">=26.2.155"
+    "cloth-config": ">=${cloth_config_version}"
   },
   "recommends": {
-    "modmenu": ">=20.0.0-beta.3"
+    "modmenu": ">=${modmenu_version}"
   },
   "suggests": {}
 }
