@@ -36,10 +36,8 @@ public class ItemRarityHelper {
         return getColorIfEnabled(stack, RarityGlow.CONFIG.beamEnabled, s -> s.beamEnabled);
     }
 
-    /**
-     * Returns true if beam rendering is enabled for at least one rarity tier.
-     * Used as a fast-path early exit before iterating entities.
-     */
+    // Returns true if beam rendering is enabled for at least one rarity tier.
+    // Used as a fast-path early exit before iterating entities.
     public static boolean anyBeamEnabled() {
         var config = RarityGlow.CONFIG;
         return config.common.beamEnabled

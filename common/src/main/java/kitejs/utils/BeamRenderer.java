@@ -81,11 +81,9 @@ public class BeamRenderer {
         }
     }
 
-    /**
-     * Draws the beam pillars and the honeycomb pattern for nearby dropped items.
-     * Called from each loader's own render hook: Fabric {@code LevelRenderEvents},
-     * NeoForge {@code SubmitCustomGeometryEvent}.
-     */
+    // Draws the beam pillars and the honeycomb pattern for nearby dropped items.
+    // Called from each loader's own render hook: Fabric LevelRenderEvents,
+    // NeoForge SubmitCustomGeometryEvent.
     public static void render(PoseStack matrices, SubmitNodeCollector submitNodeCollector) {
         ClientLevel world = Minecraft.getInstance().level;
         if (world == null) return;

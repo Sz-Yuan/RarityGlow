@@ -13,10 +13,8 @@ public class RarityGlow {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static volatile RarityGlowConfig CONFIG;
 
-    /**
-     * Loader-independent setup: registers the Cloth Config holder and fills the color cache.
-     * Called from each platform entry point.
-     */
+    // Loader-independent setup: registers the Cloth Config holder and fills the color cache.
+    // Called from each platform entry point.
     public static void init() {
         LOGGER.info("RarityGlow initializing...");
         AutoConfig.register(RarityGlowConfig.class, Toml4jConfigSerializer::new);
