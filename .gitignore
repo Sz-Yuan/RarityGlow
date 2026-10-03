@@ -42,3 +42,4 @@ replay_*.log
 *.jfr
 mcsrc/
 /AGENTS.md
+/Minecraft-多加载器配置指南.md
