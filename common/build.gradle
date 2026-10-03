@@ -1,0 +1,31 @@
+plugins {
+    id 'multiloader-common'
+    id 'net.neoforged.moddev'
+}
+
+neoForge {
+    neoFormVersion = neo_form_version
+}
+
+dependencies {
+    // Shared API of Cloth Config (AutoConfig); the platform modules pull their own artifact.
+    compileOnly "me.shedaniel.cloth:cloth-config:${cloth_config_version}"
+    // Mixin API only: both loaders ship Mixin at runtime (Fabric's fork / NeoForge's bundled Mixin).
+    compileOnly "net.fabricmc:sponge-mixin:0.17.4+mixin.0.8.7"
+}
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}

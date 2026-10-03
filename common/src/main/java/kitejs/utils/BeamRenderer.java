@@ -3,8 +3,6 @@ package kitejs.utils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import kitejs.RarityGlow;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,7 +15,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures {
+public class BeamRenderer {
 
     // --- Honeycomb constants (cellRadius = 0.09f) ---
     private static final float CELL_RADIUS = 0.09f;
@@ -83,8 +81,12 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         }
     }
 
-    @Override
-    public void afterTranslucentFeatures(LevelRenderContext context) {
+    /**
+     * Draws the beam pillars and the honeycomb pattern for nearby dropped items.
+     * Called from each loader's own render hook: Fabric {@code LevelRenderEvents},
+     * NeoForge {@code SubmitCustomGeometryEvent}.
+     */
+    public static void render(PoseStack matrices, SubmitNodeCollector submitNodeCollector) {
         ClientLevel world = Minecraft.getInstance().level;
         if (world == null) return;
 
@@ -108,10 +110,7 @@ public class BeamRenderer implements LevelRenderEvents.AfterTranslucentFeatures 
         boolean patternEnabled = config.beam.patternEnabled;
         float partialTicks = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
-        PoseStack matrices = context.poseStack();
         matrices.pushPose();
-
-        SubmitNodeCollector submitNodeCollector = context.submitNodeCollector();
 
         submitNodeCollector.submitCustomGeometry(matrices, RenderTypes.debugQuads(), (pose, vc) -> {
             for (var entity : world.entitiesForRendering()) {

@@ -20,9 +20,15 @@ RarityGlow adds a **colored glow**, **3D beam pillar**, and **honeycomb floor pa
 - 🔘 **Per-rarity toggles** — enable/disable glow and beam independently for each rarity
 - 🔧 **ModMenu support** — all settings available through the config screen
 
-### Requirements
-- Fabric API
-- Cloth Config
+### Supported loaders
+- **Fabric** — requires Fabric API + Cloth Config; [Mod Menu](https://modrinth.com/mod/modmenu) is optional (config screen)
+- **NeoForge** — requires Cloth Config only (config screen is offered from the mod list)
+
+### Building
+```bash
+./gradlew :fabric:build     # -> fabric/build/libs/
+./gradlew :neoforge:build   # -> neoforge/build/libs/
+```
 
 </details>
 
@@ -46,8 +52,14 @@ RarityGlow 为掉落物添加**稀有度彩色发光**、**3D 光柱**和**蜂�
 - 🔘 **独立开关** — 发光和光柱对每种稀有度可分别开关
 - 🔧 **ModMenu 支持** — 所有设置在配置界面中调整
 
-### 依赖
-- Fabric API
-- Cloth Config
+### 支持的加载器
+- **Fabric** — 需要 Fabric API + Cloth Config；配置界面可选装 [Mod Menu](https://modrinth.com/mod/modmenu)
+- **NeoForge** — 只需要 Cloth Config（配置界面由 NeoForge 的模组列表提供）
+
+### 构建
+```bash
+./gradlew :fabric:build     # 产物在 fabric/build/libs/
+./gradlew :neoforge:build   # 产物在 neoforge/build/libs/
+```
 
 </details>
